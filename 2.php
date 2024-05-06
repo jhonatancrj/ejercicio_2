@@ -7,29 +7,24 @@
     <h1>ABC Personas y Cuentas Bancarias</h1>
 
     <?php
-    // Conexión a la base de datos
     $conexion = new mysqli('localhost', 'root', '', 'bdjhonatan');
 
-    // Manejo de errores en la conexión
     if ($conexion->connect_error) {
         die("Error en la conexión a la base de datos: " . $conexion->connect_error);
     }
 
-    // Función para obtener todas las personas de la base de datos
     function obtenerPersonas($conexion) {
         $query = "SELECT * FROM Persona";
         $result = $conexion->query($query);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    // Función para obtener las cuentas bancarias de una persona
     function obtenerCuentasBancarias($conexion, $persona_id) {
         $query = "SELECT * FROM CuentaBancaria WHERE persona_id = $persona_id";
         $result = $conexion->query($query);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    // Agregar persona
     if (isset($_POST['agregar_persona'])) {
         $nombre = $_POST['nombre'];
         $apellido = $_POST['apellido'];
@@ -44,7 +39,6 @@
         }
     }
 
-    // Mostrar formulario para agregar persona
     echo "<h2>Agregar Persona:</h2>";
     echo "<form method='post'>";
     echo "Nombre: <input type='text' name='nombre'><br>";
@@ -54,10 +48,8 @@
     echo "<input type='submit' name='agregar_persona' value='Agregar'>";
     echo "</form>";
 
-    // Obtener todas las personas de la base de datos
     $personas = obtenerPersonas($conexion);
 
-    // Mostrar formulario para seleccionar una persona
     echo "<h2>Seleccione una persona:</h2>";
     echo "<form method='post'>";
     echo "<select name='persona_id'>";
@@ -68,12 +60,10 @@
     echo "<input type='submit' name='seleccionar_persona' value='Seleccionar'>";
     echo "</form>";
 
-    // Procesar selección de persona
     if (isset($_POST['seleccionar_persona'])) {
         $persona_id = $_POST['persona_id'];
         $cuentas_bancarias = obtenerCuentasBancarias($conexion, $persona_id);
 
-        // Mostrar cuentas bancarias de la persona seleccionada
         echo "<h2>Cuentas Bancarias de la Persona:</h2>";
         echo "<ul>";
         foreach ($cuentas_bancarias as $cuenta) {
@@ -81,7 +71,6 @@
         }
         echo "</ul>";
 
-        // Mostrar formulario para editar y eliminar persona
         echo "<h2>Editar/Eliminar Persona:</h2>";
         echo "<form method='post'>";
         echo "<input type='hidden' name='persona_id' value='$persona_id'>";
@@ -94,7 +83,6 @@
         echo "</form>";
     }
 
-    // Editar persona
     if (isset($_POST['editar_persona'])) {
         $persona_id = $_POST['persona_id'];
         $nombre = $_POST['nombre'];
@@ -110,7 +98,6 @@
         }
     }
 
-    // Eliminar persona
     if (isset($_POST['eliminar_persona'])) {
         $persona_id = $_POST['persona_id'];
 
@@ -122,7 +109,6 @@
         }
     }
 
-    // Cerrar conexión a la base de datos
     $conexion->close();
     ?>
 </body>
